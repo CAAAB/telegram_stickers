@@ -77,6 +77,10 @@ import requests
 
 keep_bg = False
 
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
+removebgkey = os.environ.get('REMOVEBGKEY')
+
+
 def remove_background(input_stream, output_stream, removebgkey):
     print("Attempting to remove background...")
     response = requests.post(
