@@ -154,7 +154,7 @@ bot = telebot.TeleBot(BOT_TOKEN)
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     print("Received start or help command.")
-    bot.reply_to(message, "Hello! Send me an image to process.")
+    bot.reply_to(message, "Hello! Send me an image to process, provide the name of the sticker pack the sticker should be added to and the corresponding emoji separated by a comma.")
 
 @bot.message_handler(content_types=['photo'])
 def handle_docs_photo(message):
