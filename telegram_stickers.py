@@ -79,24 +79,32 @@ keep_bg = False
 
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 removebgkey = os.environ.get('REMOVEBGKEY')
+removebg_keys = [removebgkey]
+for i in range(1, 11):
+    key = os.environ.get(f'REMOVEBGKEY{i}')
+    if key:
+        removebg_keys.append(key)
 
 
-def remove_background(input_stream, output_stream, removebgkey):
-    print("Attempting to remove background...")
-    response = requests.post(
-        'https://api.remove.bg/v1.0/removebg',
-        files={'image_file': input_stream},
-        data={'size': 'auto'},
-        headers={'X-Api-Key': removebgkey},
-    )
-    if response.status_code == requests.codes.ok:
-        output_stream.write(response.content)
-        output_stream.seek(0)
-        print("Background removed successfully.")
-        return output_stream
-    else:
-        print(f"Failed to remove background. Status code: {response.status_code}")
-        return None
+def remove_background(input_stream, output_stream, removebg_keys):
+    for i, removebgkey in enumerate(removebg_keys):
+        print(f"Attempting to remove background with key {removebgkey}...")
+        response = requests.post(
+            'https://api.remove.bg/v1.0/removebg',
+            files={'image_file': input_stream},
+            data={'size': 'auto'},
+            headers={'X-Api-Key': removebgkey},
+        )
+        if response.status_code == requests.codes.ok:
+            output_stream.write(response.content)
+            output_stream.seek(0)
+            print("Background removed successfully.")
+            return output_stream
+        else:
+            print(f"Failed with key {i}. Status code: {response.status_code} - {response.text}")
+    print("All keys exhausted. Failed to remove background.")
+    return None
+
 
 
 def resize_image(input_stream, output_stream):
@@ -175,7 +183,7 @@ def handle_docs_photo(message):
         if keep_bg:
             no_bg_image_stream = original_image_stream
         else:
-            no_bg_image_stream = remove_background(original_image_stream, no_bg_image_stream, removebgkey)
+            no_bg_image_stream = remove_background(original_image_stream, no_bg_image_stream, removebg_keys)
 
         # Resize the image
         resized_image_stream = resize_image(no_bg_image_stream, resized_image_stream)
