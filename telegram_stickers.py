@@ -1,3 +1,14 @@
+keep_bg = False
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
+removebgkey = os.environ.get('REMOVEBGKEY')
+removebg_keys = removebgkey.split(', ')
+
+import telebot
+import io
+import os
+from PIL import Image, ImageOps
+import requests
+
 def create_sticker_pack(bot, message, sticker_file_stream, pack_name, emojis):
     try:
         print(f"Creating a new sticker pack named {pack_name}...")
@@ -51,7 +62,7 @@ def add_or_create_sticker_to_pack(bot, message, sticker_file_stream, user_provid
         bot.add_sticker_to_set(user_id=chat_id, name=full_pack_name, png_sticker=sticker_file_id, emojis=emoji_list)
         bot.send_message(chat_id, f"Sticker successfully added to pack [{full_pack_name}](https://t.me/addstickers/{full_pack_name}).", parse_mode='Markdown')
 
-        
+
     except telebot.apihelper.ApiException as e:
         if 'STICKERSET_INVALID' in str(e):
             # Create the sticker pack and add the sticker
@@ -63,32 +74,19 @@ def add_or_create_sticker_to_pack(bot, message, sticker_file_stream, user_provid
     except Exception as e:
         print(f"Couldn't add the sticker to {full_pack_name}: {e}")
         bot.send_message(chat_id, f"Failed to add sticker to pack: {e}")
-        
+
 def delete_sticker_from_set(bot_token, file_id):
     data = {'sticker': file_id}
     response = requests.post(f'https://api.telegram.org/bot{bot_token}/deleteStickerFromSet', data=data)
     return response.json()
 
-import telebot
-import io
-import os
-from PIL import Image, ImageOps
-import requests
-
-keep_bg = False
-
-BOT_TOKEN = os.environ.get('BOT_TOKEN')
-removebgkey = os.environ.get('REMOVEBGKEY')
-removebg_keys = [removebgkey]
-for i in range(1, 11):
-    key = os.environ.get(f'REMOVEBGKEY{i}')
-    if key:
-        removebg_keys.append(key)
-
-
 def remove_background(input_stream, output_stream, removebg_keys):
     for i, removebgkey in enumerate(removebg_keys):
-        print(f"Attempting to remove background with key {removebgkey}...")
+        print(f"Attempting to remove background with key {i}...")
+        input_stream.seek(0)  # Reset stream position to the start
+        image = Image.open(input_stream)
+        image.show()
+        input_stream.seek(0)
         response = requests.post(
             'https://api.remove.bg/v1.0/removebg',
             files={'image_file': input_stream},
@@ -104,8 +102,6 @@ def remove_background(input_stream, output_stream, removebg_keys):
             print(f"Failed with key {i}. Status code: {response.status_code} - {response.text}")
     print("All keys exhausted. Failed to remove background.")
     return None
-
-
 
 def resize_image(input_stream, output_stream):
     print("Attempting to resize image...")
@@ -173,7 +169,7 @@ def handle_docs_photo(message):
             components = message.caption.split(',')
             pack_name = components[0].strip()
             emojis = components[1].strip()
-            
+
             # Check if "keepbg" is in the caption as an optional argument
             if len(components) > 2 and "keepbg" in components[2].lower().strip():
                 keep_bg = True
@@ -221,9 +217,9 @@ def handle_sticker(message):
         print("Received a sticker. Attempting to remove from pack...")
 
         sticker_file_id = message.sticker.file_id
-        
+
         response = delete_sticker_from_set(BOT_TOKEN, sticker_file_id)
-        
+
         if response.get('ok'):
             bot.send_message(message.chat.id, "Sticker successfully removed from pack.")
         else:
@@ -232,7 +228,5 @@ def handle_sticker(message):
     except Exception as e:
         print(f"An exception occurred: {e}")
         bot.send_message(message.chat.id, f'Oops, an error occurred: {e}')
-
-
 
 bot.polling()
