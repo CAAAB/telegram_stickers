@@ -1,13 +1,13 @@
-keep_bg = False
-BOT_TOKEN = os.environ.get('BOT_TOKEN')
-removebgkey = os.environ.get('REMOVEBGKEY')
-removebg_keys = removebgkey.split(', ')
-
 import telebot
 import io
 import os
 from PIL import Image, ImageOps
 import requests
+
+keep_bg = False
+BOT_TOKEN = os.environ.get('BOT_TOKEN')
+removebgkey = os.environ.get('REMOVEBGKEY')
+removebg_keys = removebgkey.split(', ')
 
 def create_sticker_pack(bot, message, sticker_file_stream, pack_name, emojis):
     try:
