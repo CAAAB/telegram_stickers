@@ -26,14 +26,3 @@ jobs:
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         REMOVEBGKEY: ${{ secrets.REMOVEBGKEY }}
       run: python telegram_stickers.py
-
-    - name: Create keepalive file
-      run: touch keepalive
-
-    - name: Commit and push keepalive file
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add keepalive
-        git commit -m "Add keepalive file"
-        git push
