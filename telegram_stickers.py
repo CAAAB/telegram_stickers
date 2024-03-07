@@ -151,6 +151,7 @@ bot = telebot.TeleBot(BOT_TOKEN)
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     print("Received start or help command.")
+    bot.send_message(message.chat.id, f"Sup, @{user_handle}. Or should I say, {message.chat.id}")
     bot.reply_to(message, "Hello! Send me an image to process, provide the name of the sticker pack the sticker should be added to and the corresponding emoji separated by a comma.")
 
 @bot.message_handler(content_types=['photo'])
@@ -159,7 +160,7 @@ def handle_docs_photo(message):
         if message.chat.id == user_handle:
             bot.send_message(message.chat.id, f"Screw you @{user_name}")
         else:
-            bot.send_message(f"Image received, @{user_handle}")
+            bot.send_message(message.chat.id, f"Image received, @{user_handle}")
             print("Received an image. Attempting to process...")
 
         file_info = bot.get_file(message.photo[-1].file_id)
