@@ -8,7 +8,8 @@ keep_bg = False
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 removebgkey = os.environ.get('REMOVEBGKEY')
 removebg_keys = removebgkey.split(', ')
-user_info = os.environ.get('USER_INFO').split(',')
+user_info = os.environ.get('USER_INFO')
+user_info = user_info.split(',')
 user_handle, user_name = user_info
 
 def create_sticker_pack(bot, message, sticker_file_stream, pack_name, emojis):
