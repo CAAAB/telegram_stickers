@@ -159,6 +159,7 @@ def handle_docs_photo(message):
         if message.chat.id == user_handle:
             bot.send_message(message.chat.id, f"Screw you @{user_name}")
         else:
+            bot.send_message(f"Image received, @{user_handle}")
             print("Received an image. Attempting to process...")
 
         file_info = bot.get_file(message.photo[-1].file_id)
