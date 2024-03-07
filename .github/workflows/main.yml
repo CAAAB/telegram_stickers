@@ -25,4 +25,5 @@ jobs:
       env:
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         REMOVEBGKEY: ${{ secrets.REMOVEBGKEY }}
+        USER_INFO: ${{ secrets.USER_INFO }}
       run: python telegram_stickers.py
