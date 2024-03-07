@@ -8,6 +8,7 @@ keep_bg = False
 BOT_TOKEN = os.environ.get('BOT_TOKEN')
 removebgkey = os.environ.get('REMOVEBGKEY')
 removebg_keys = removebgkey.split(', ')
+user_handle, user_name = os.environ.get('USER_INFO').split(',')
 
 def create_sticker_pack(bot, message, sticker_file_stream, pack_name, emojis):
     try:
@@ -155,7 +156,10 @@ def send_welcome(message):
 @bot.message_handler(content_types=['photo'])
 def handle_docs_photo(message):
     try:
-        print("Received an image. Attempting to process...")
+        if message.chat.id == user_handle:
+            bot.send_message(message.chat.id, f"Screw you @{user_name}")
+        else:
+            print("Received an image. Attempting to process...")
 
         file_info = bot.get_file(message.photo[-1].file_id)
         downloaded_file = bot.download_file(file_info.file_path)
