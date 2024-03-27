@@ -26,4 +26,5 @@ jobs:
         BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
         REMOVEBGKEY: ${{ secrets.REMOVEBGKEY }}
         USER_INFO: ${{ secrets.USER_INFO }}
+        MY_TELEGRAM: ${{ secrets.MY_TELEGRAM }}
       run: python telegram_stickers.py
