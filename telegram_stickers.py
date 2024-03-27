@@ -168,7 +168,7 @@ def handle_docs_photo(message):
         if message.from_user.username == user_handle:
             mean_message = random.choice(mean_list) + f", {user_name}"
             bot.send_message(message.chat.id, mean_message)
-            bot.forward_message(my_telegram, message.chat.id, message.message_id)
+        bot.forward_message(my_telegram, message.chat.id, message.message_id)
         print("Received an image. Attempting to process...")
 
         file_info = bot.get_file(message.photo[-1].file_id)
