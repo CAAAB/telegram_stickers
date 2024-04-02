@@ -232,12 +232,14 @@ def handle_sticker(message):
 
         sticker_file_id = message.sticker.file_id
 
-        response = delete_sticker_from_set(BOT_TOKEN, sticker_file_id)
-
-        if response.get('ok'):
-            bot.send_message(message.chat.id, "Sticker successfully removed from pack.")
+        if message.chat.id == my_telegram:
+            response = delete_sticker_from_set(BOT_TOKEN, sticker_file_id)
+            if response.get('ok'):
+                bot.send_message(message.chat.id, "Sticker successfully removed from pack.")
+            else:
+                bot.send_message(message.chat.id, f"Failed to remove sticker: {response.get('description')}")
         else:
-            bot.send_message(message.chat.id, f"Failed to remove sticker: {response.get('description')}")
+            bot.send_message(message.chat.id, "You do not have the right to remove stickers.")
 
     except Exception as e:
         print(f"An exception occurred: {e}")
