@@ -159,7 +159,7 @@ def send_welcome(message):
 
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
-    if message.chat.id == my_telegram:
+    if message.from_user.username == my_telegram:
         bot.send_message(other_telegram, message.text)
     else:
         mean_message = random.choice(mean_list)
@@ -237,7 +237,7 @@ def handle_sticker(message):
 
         sticker_file_id = message.sticker.file_id
 
-        if message.chat.id == my_telegram:
+        if message.from_user.username == my_telegram:
             response = delete_sticker_from_set(BOT_TOKEN, sticker_file_id)
             if response.get('ok'):
                 bot.send_message(message.chat.id, "Sticker successfully removed from pack.")
