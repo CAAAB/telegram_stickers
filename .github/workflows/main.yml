@@ -28,4 +28,5 @@ jobs:
         USER_INFO: ${{ secrets.USER_INFO }}
         MY_TELEGRAM: ${{ secrets.MY_TELEGRAM }}
         OTHER_TELEGRAM: ${{ secrets.OTHER_TELEGRAM }}
+        MYUSERNAMENOAT: ${{ secrets.MYUSERNAMENOAT }}
       run: python telegram_stickers.py
