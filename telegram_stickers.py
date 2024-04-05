@@ -167,6 +167,7 @@ def handle_text(message):
         mean_message = random.choice(mean_list)
         bot.send_message(message.chat.id, mean_message) # Mean message
         bot.forward_message(my_telegram, message.chat.id, message.message_id) # Forward message
+        bot.send_message(my_telegram, mean_message) # Mean message
         #bot.send_message(my_telegram, message.chat.id) # Send ID
 
 @bot.message_handler(content_types=['photo'])
