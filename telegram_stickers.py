@@ -128,7 +128,7 @@ def resize_image(input_stream, output_stream):
         new_width = int(max_size * aspect_ratio)
 
     # Resize the image
-    image_resized = image.resize((new_width, new_height), Image.ANTIALIAS)
+    image_resized = image.resize((new_width, new_height), Image.LANCZOS)
 
     # Create a new image with white background
     padded_img = Image.new("RGBA", target_size, (0, 0, 0, 0))
