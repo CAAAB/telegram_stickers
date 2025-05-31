@@ -162,7 +162,7 @@ def send_welcome(message):
 @bot.message_handler(content_types=['text'])
 def handle_text(message):
     if message.from_user.username == my_username_noat:
-        bot.send_message(other_telegram, message.text)
+        #bot.send_message(other_telegram, message.text) # sends message to P
     else:
         mean_message = random.choice(mean_list)
         bot.send_message(message.chat.id, mean_message) # Mean message
